@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piko — Ahmed Al Akib</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ── PIKO DESIGN SYSTEM ── */
+  /* Warm graphite base, copper signature accent, cool mint for data/success */
+  --bg:#15151a;
+  --bg-raised:#1b1b22;
+  --bg-panel:#1f1f28;
+  --bg-inset:#101014;
+  --hairline:rgba(232,168,124,0.10);
+  --hairline-strong:rgba(232,168,124,0.22);
+
+  --copper:#e8a87c;
+  --copper-dim:#b8835f;
+  --copper-glow:rgba(232,168,124,0.14);
+  --mint:#7fd9c4;
+  --mint-glow:rgba(127,217,196,0.14);
+  --rose:#e8847c;
+  --gold:#e8c87c;
+
+  --ink:#ece8e2;
+  --ink-dim:#9b9892;
+  --ink-faint:#5f5d59;
+
+  --radius:10px;
+  --radius-sm:6px;
+
+  --font-display:'JetBrains Mono', monospace;
+  --font-body:'Inter', system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 12% -8%, rgba(232,168,124,0.07), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 10%, rgba(127,217,196,0.05), transparent 60%),
+    var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  min-height:100vh;
+  display:flex;
+  overflow:hidden;
+}
+
+/* ══════════════ SIDEBAR ══════════════ */
+#sidebar{
+  width:232px;min-height:100vh;
+  background:var(--bg-raised);
+  border-right:1px solid var(--hairline);
+  display:flex;flex-direction:column;
+  padding:24px 0 18px;
+  position:fixed;top:0;left:0;bottom:0;z-index:10;
+}
+.brand{padding:0 22px 22px;border-bottom:1px solid var(--hairline);margin-bottom:6px;}
+.brand-mark{display:flex;align-items:baseline;gap:8px;}
+.brand-mark h1{
+  font-family:var(--font-display);font-size:21px;font-weight:700;
+  color:var(--copper);letter-spacing:0.5px;
+}
+.brand-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint);}
+.brand p{font-size:10.5px;color:var(--ink-faint);margin-top:5px;letter-spacing:0.6px;text-transform:uppercase;font-family:var(--font-display);}
+
+.nav-section{padding:14px 22px 4px;}
+.nav-eyebrow{font-family:var(--font-display);font-size:9.5px;color:var(--ink-faint);letter-spacing:1.5px;text-transform:uppercase;}
+
+.nav-item{
+  display:flex;align-items:center;gap:11px;
+  margin:1px 12px;padding:9px 10px;
+  cursor:pointer;border-radius:var(--radius-sm);
+  font-size:13.5px;color:var(--ink-dim);font-weight:500;
+  transition:all .15s;position:relative;
+}
+.nav-item:hover{color:var(--ink);background:rgba(255,255,255,0.03);}
+.nav-item.active{color:var(--copper);background:var(--copper-glow);}
+.nav-item.active::before{
+  content:'';position:absolute;left:-12px;top:50%;transform:translateY(-50%);
+  width:3px;height:16px;border-radius:2px;background:var(--copper);
+}
+.nav-tag{
+  font-family:var(--font-display);font-size:10px;width:18px;text-align:center;
+  color:inherit;opacity:0.75;flex-shrink:0;
+}
+.sidebar-footer{margin-top:auto;padding:16px 22px;border-top:1px solid var(--hairline);}
+.status-line{
+  font-family:var(--font-display);font-size:11px;color:var(--mint);
+  display:flex;align-items:center;gap:7px;margin-bottom:7px;
+}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 6px var(--mint);flex-shrink:0;}
+.id-line{font-family:var(--font-display);font-size:10.5px;color:var(--ink-faint);letter-spacing:0.3px;}
+
+/* ══════════════ MAIN ══════════════ */
+#main{margin-left:232px;flex:1;min-height:100vh;overflow-y:auto;}
+.page{display:none;padding:30px 36px 40px;animation:rise .25s cubic-bezier(.16,1,.3,1);}
+.page.active{display:block;}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;}
+.eyebrow{font-family:var(--font-display);font-size:10.5px;color:var(--copper-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.page-header h2{font-size:23px;font-weight:700;letter-spacing:-0.3px;}
+.page-header p{font-size:13px;color:var(--ink-dim);margin-top:4px;}
+
+/* ══════════════ CARDS ══════════════ */
+.card{
+  background:var(--bg-panel);
+  border:1px solid var(--hairline);
+  border-radius:var(--radius);
+  padding:20px;margin-bottom:16px;
+}
+.card h3{
+  font-family:var(--font-display);font-size:11px;font-weight:600;
+  color:var(--ink-faint);text-transform:uppercase;letter-spacing:1.4px;
+  margin-bottom:14px;display:flex;align-items:center;gap:7px;
+}
+.card h3::before{content:'';width:3px;height:11px;background:var(--copper-dim);border-radius:1px;}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+
+/* ══════════════ STAT CARDS ══════════════ */
+.stat-card{
+  background:var(--bg-panel);border:1px solid var(--hairline);
+  border-radius:var(--radius);padding:18px;position:relative;overflow:hidden;
+}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--copper),transparent);}
+.stat-number{font-family:var(--font-display);font-size:30px;font-weight:700;color:var(--ink);letter-spacing:-1px;}
+.stat-label{font-size:11px;color:var(--ink-faint);margin-top:5px;letter-spacing:0.3px;}
+
+/* ══════════════ BUTTONS ══════════════ */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 17px;border-radius:var(--radius-sm);
+  font-size:13px;font-weight:600;cursor:pointer;
+  border:none;transition:all .15s;text-decoration:none;
+  font-family:var(--font-body);
+}
+.btn-primary{background:var(--copper);color:#1a1410;}
+.btn-primary:hover{background:#f0b88c;transform:translateY(-1px);}
+.btn-secondary{background:transparent;color:var(--ink-dim);border:1px solid var(--hairline-strong);}
+.btn-secondary:hover{color:var(--ink);border-color:var(--copper-dim);}
+.btn-danger{background:rgba(232,132,124,0.12);color:var(--rose);border:1px solid rgba(232,132,124,0.25);}
+.btn-danger:hover{background:rgba(232,132,124,0.2);}
+.btn-sm{padding:6px 12px;font-size:12px;}
+
+/* ══════════════ INPUTS ══════════════ */
+input,textarea,select{
+  width:100%;background:var(--bg-inset);
+  border:1px solid var(--hairline-strong);border-radius:var(--radius-sm);
+  color:var(--ink);padding:9px 12px;font-size:13.5px;
+  font-family:var(--font-body);outline:none;transition:border-color .15s;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--copper-dim);}
+textarea{resize:vertical;min-height:80px;}
+label{font-family:var(--font-display);font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:5px;margin-top:12px;}
+.form-group{margin-bottom:13px;}
+
+/* ══════════════ BADGES ══════════════ */
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;font-family:var(--font-display);letter-spacing:0.3px;}
+.badge-copper{background:var(--copper-glow);color:var(--copper);}
+.badge-mint{background:var(--mint-glow);color:var(--mint);}
+.badge-rose{background:rgba(232,132,124,0.15);color:var(--rose);}
+.badge-gold{background:rgba(232,200,124,0.15);color:var(--gold);}
+
+/* ══════════════ DASHBOARD ══════════════ */
+.hero-card{
+  background:linear-gradient(135deg, rgba(232,168,124,0.10), rgba(127,217,196,0.04));
+  border:1px solid var(--hairline-strong);
+  border-radius:var(--radius);padding:28px 26px;margin-bottom:16px;
+  position:relative;overflow:hidden;
+}
+.hero-card::before{
+  content:'';position:absolute;top:-40%;right:-10%;width:280px;height:280px;
+  background:radial-gradient(circle, var(--copper-glow), transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{font-family:var(--font-display);font-size:10.5px;color:var(--copper-dim);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase;}
+.hero-greet{font-size:21px;font-weight:700;margin-bottom:16px;letter-spacing:-0.3px;}
+#clock-big{font-family:var(--font-display);font-size:50px;font-weight:700;color:var(--ink);line-height:1;letter-spacing:-1px;}
+#date-big{font-size:13.5px;color:var(--ink-dim);margin-top:6px;}
+
+.upcoming-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--hairline);}
+.upcoming-item:last-child{border-bottom:none;}
+.upcoming-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+
+/* ══════════════ CHAT ══════════════ */
+#chat-history{height:460px;overflow-y:auto;display:flex;flex-direction:column;gap:11px;padding-right:6px;margin-bottom:14px;}
+#chat-history::-webkit-scrollbar{width:4px;}
+#chat-history::-webkit-scrollbar-thumb{background:var(--hairline-strong);border-radius:2px;}
+.msg{display:flex;gap:10px;animation:rise .2s ease;}
+.msg.user{flex-direction:row-reverse;}
+.msg-bubble{max-width:78%;padding:11px 15px;border-radius:13px;font-size:13.5px;line-height:1.6;white-space:pre-wrap;}
+.msg.user .msg-bubble{background:var(--copper);color:#1a1410;font-weight:500;border-radius:13px 13px 3px 13px;}
+.msg.ai .msg-bubble{background:var(--bg-inset);color:var(--ink);border:1px solid var(--hairline);border-radius:13px 13px 13px 3px;}
+.msg-avatar{
+  width:28px;height:28px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:11px;font-weight:700;flex-shrink:0;
+}
+.msg.user .msg-avatar{background:var(--copper);color:#1a1410;}
+.msg.ai .msg-avatar{background:var(--bg-inset);border:1px solid var(--hairline-strong);color:var(--mint);}
+.chat-input-row{display:flex;gap:10px;}
+.chat-input-row textarea{height:46px;min-height:46px;resize:none;padding:12px 14px;}
+.typing-dot{width:5px;height:5px;border-radius:50%;background:var(--ink-faint);animation:blink 1.2s infinite;display:inline-block;margin-right:3px;}
+.typing-dot:nth-child(2){animation-delay:.2s;}
+.typing-dot:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
+.quick-chip{
+  padding:6px 12px;border-radius:20px;font-size:11.5px;cursor:pointer;
+  background:var(--bg-inset);border:1px solid var(--hairline-strong);color:var(--ink-dim);
+  transition:all .15s;display:inline-block;margin:3px;font-family:var(--font-display);
+}
+.quick-chip:hover{border-color:var(--copper-dim);color:var(--copper);}
+
+/* ══════════════ PROJECTS ══════════════ */
+.project-card{background:var(--bg-panel);border:1px solid var(--hairline);border-radius:var(--radius);padding:17px;margin-bottom:13px;}
+.progress-bar{height:3px;background:var(--bg-inset);border-radius:2px;margin:9px 0;overflow:hidden;}
+.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--copper-dim),var(--copper));transition:width .3s;}
+.task-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--hairline);font-size:13px;color:var(--ink-dim);}
+.task-item:last-child{border-bottom:none;}
+.task-item.done span{text-decoration:line-through;opacity:.45;}
+.task-cb{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--hairline-strong);cursor:pointer;flex-shrink:0;background:transparent;appearance:none;transition:all .15s;}
+.task-cb:checked{background:var(--copper);border-color:var(--copper);}
+
+/* ══════════════ NOTES ══════════════ */
+.note-card{background:var(--bg-panel);border:1px solid var(--hairline);border-radius:var(--radius);padding:16px;cursor:pointer;transition:border-color .15s;}
+.note-card:hover{border-color:var(--hairline-strong);}
+.note-card h4{font-size:14px;font-weight:600;margin-bottom:7px;}
+.note-card p{font-size:12.5px;color:var(--ink-dim);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;line-height:1.55;}
+.note-date{font-family:var(--font-display);font-size:10px;color:var(--ink-faint);margin-top:9px;}
+
+/* ══════════════ EXAMS ══════════════ */
+.exam-card{background:var(--bg-panel);border:1px solid var(--hairline);border-radius:var(--radius);padding:16px;margin-bottom:13px;display:flex;align-items:center;gap:15px;}
+.countdown-box{text-align:center;min-width:68px;background:var(--bg-inset);border-radius:var(--radius-sm);padding:11px;border:1px solid var(--hairline-strong);}
+.countdown-num{font-family:var(--font-display);font-size:23px;font-weight:700;line-height:1;}
+.countdown-label{font-family:var(--font-display);font-size:9px;color:var(--ink-faint);margin-top:3px;letter-spacing:0.5px;}
+
+/* ══════════════ COVER PAGE ══════════════ */
+#cover-preview{background:#fdfbf7;color:#1a1a1a;border-radius:var(--radius);padding:44px 38px;min-height:400px;font-family:'Times New Roman',serif;border:1px solid var(--hairline);}
+.cover-logo-box{width:64px;height:64px;background:var(--copper-dim);border-radius:8px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:bold;font-family:var(--font-display);}
+.cover-uni{font-size:15px;font-weight:bold;text-align:center;margin-bottom:4px;}
+.cover-dept{font-size:12px;text-align:center;color:#555;margin-bottom:36px;}
+.cover-title{font-size:20px;font-weight:bold;text-align:center;border-bottom:2px solid #1a1a1a;border-top:2px solid #1a1a1a;padding:14px 0;margin:0 30px 28px;}
+.cover-course{font-size:13px;text-align:center;color:#444;margin-bottom:36px;}
+.cover-table{width:100%;border-collapse:collapse;font-size:12px;max-width:300px;margin:0 auto;}
+.cover-table td{padding:6px 10px;border:1px solid #ddd;}
+.cover-table td:first-child{background:#f5f2ec;font-weight:bold;width:42%;}
+
+/* ══════════════ SLIDES ══════════════ */
+.slide-preview{background:#1a1a22;border-radius:var(--radius);padding:28px 24px;aspect-ratio:16/9;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;margin-bottom:11px;border:1px solid var(--hairline-strong);}
+.slide-preview::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.slide-preview h2{font-size:18px;font-weight:700;margin-bottom:14px;color:#fff;}
+.slide-preview ul{font-size:12px;color:rgba(255,255,255,.78);list-style:none;line-height:2;}
+.slide-preview ul li::before{content:'▸ ';color:var(--mint);}
+.slide-num{position:absolute;bottom:8px;right:12px;font-family:var(--font-display);font-size:10px;color:rgba(255,255,255,.3);}
+
+/* ══════════════ SETTINGS ══════════════ */
+.settings-section{margin-bottom:26px;}
+.settings-section h3{font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:13px;padding-bottom:9px;border-bottom:1px solid var(--hairline);}
+.info-box{padding:14px 17px;background:var(--copper-glow);border:1px solid var(--hairline-strong);border-radius:var(--radius);font-size:13px;color:var(--ink-dim);margin-bottom:14px;line-height:1.65;}
+.info-box strong{color:var(--ink);}
+.info-box.mint{background:var(--mint-glow);}
+
+/* ══════════════ MODAL ══════════════ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,12,.78);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg-panel);border:1px solid var(--hairline-strong);border-radius:var(--radius);padding:26px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;}
+.modal h3{font-family:var(--font-display);font-size:16px;font-weight:600;margin-bottom:15px;color:var(--copper);}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+
+/* ══════════════ TOAST ══════════════ */
+#toast{position:fixed;bottom:22px;right:22px;background:var(--bg-raised);border:1px solid var(--hairline-strong);color:var(--ink);padding:11px 17px;border-radius:var(--radius-sm);font-size:13px;z-index:200;opacity:0;transform:translateY(10px);transition:all .2s;pointer-events:none;font-family:var(--font-display);}
+#toast.show{opacity:1;transform:none;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--hairline-strong);border-radius:3px;}
+
+.ai-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10.5px;font-weight:700;background:var(--mint-glow);color:var(--mint);border:1px solid rgba(127,217,196,.25);font-family:var(--font-display);letter-spacing:0.3px;}
+
+a{color:var(--mint);}
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="brand">
+    <div class="brand-mark">
+      <h1>PIKO</h1>
+      <span class="brand-dot"></span>
+    </div>
+    <p>Ahmed Al Akib · EWU ICE</p>
+  </div>
+
+  <div class="nav-section"></div>
+  <div class="nav-item active" data-page="dashboard"><span class="nav-tag">◆</span><span>Dashboard</span></div>
+  <div class="nav-item" data-page="chat"><span class="nav-tag">▸</span><span>Talk to Piko</span></div>
+  <div class="nav-item" data-page="projects"><span class="nav-tag">▣</span><span>Projects</span></div>
+  <div class="nav-item" data-page="notes"><span class="nav-tag">✎</span><span>Daily Notes</span></div>
+  <div class="nav-item" data-page="exams"><span class="nav-tag">◷</span><span>Exam Dates</span></div>
+  <div class="nav-item" data-page="mail"><span class="nav-tag">✉</span><span>University Mail</span></div>
+  <div class="nav-item" data-page="coverpage"><span class="nav-tag">▤</span><span>Cover Page</span></div>
+  <div class="nav-item" data-page="slides"><span class="nav-tag">▥</span><span>Slides Generator</span></div>
+  <div class="nav-item" data-page="settings"><span class="nav-tag">⚙</span><span>Settings</span></div>
+
+  <div class="sidebar-footer">
+    <div class="status-line"><span class="status-dot"></span>RUNNING OFFLINE</div>
+    <div class="id-line">2024-3-50-024 · SUMMER 26</div>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="hero-card">
+    <div class="hero-eyebrow">East West University · CSE · Summer 2026</div>
+    <div class="hero-greet" id="greeting-text">Good morning, Akib</div>
+    <div id="clock-big">00:00</div>
+    <div id="date-big"></div>
+  </div>
+  <div class="grid-4" style="margin-bottom:16px;">
+    <div class="stat-card"><div class="stat-number" id="stat-projects">0</div><div class="stat-label">ACTIVE PROJECTS</div></div>
+    <div class="stat-card"><div class="stat-number" id="stat-tasks">0</div><div class="stat-label">PENDING TASKS</div></div>
+    <div class="stat-card"><div class="stat-number" id="stat-notes">0</div><div class="stat-label">NOTES TODAY</div></div>
+    <div class="stat-card"><div class="stat-number" id="stat-exams">0</div><div class="stat-label">UPCOMING EXAMS</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><h3>Upcoming Exams</h3><div id="dash-exams"><p style="color:var(--ink-faint);font-size:13px;">No exams added yet</p></div></div>
+    <div class="card"><h3>Active Projects</h3><div id="dash-projects"><p style="color:var(--ink-faint);font-size:13px;">No projects yet</p></div></div>
+  </div>
+  <div class="card">
+    <h3>Quick Note</h3>
+    <textarea id="quick-note" placeholder="Type a quick note for today..." style="height:72px;margin-top:4px;"></textarea>
+    <button class="btn btn-primary btn-sm" onclick="saveQuickNote()" style="margin-top:10px;">Save Note</button>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="page" id="page-chat">
+  <div class="page-header">
+    <div><div class="eyebrow">Assistant</div><h2>Talk to Piko</h2><p id="chat-provider-label">Built-in assistant · works instantly, no setup needed</p></div>
+    <div style="display:flex;gap:8px;">
+      <span class="ai-badge">● OFFLINE</span>
+      <button class="btn btn-secondary btn-sm" onclick="clearChat()">Clear</button>
+    </div>
+  </div>
+  <div class="card" style="padding:16px;">
+    <div style="margin-bottom:10px;display:flex;flex-wrap:wrap;">
+      <div class="quick-chip" onclick="qc('study plan for ')">study plan</div>
+      <div class="quick-chip" onclick="qc('cover page')">cover page</div>
+      <div class="quick-chip" onclick="qc('add exam ')">add exam</div>
+      <div class="quick-chip" onclick="qc('new project ')">new project</div>
+      <div class="quick-chip" onclick="qc('email professor about ')">email draft</div>
+      <div class="quick-chip" onclick="qc('remind me ')">reminder</div>
+      <div class="quick-chip" onclick="qc('what is due soon')">what's due</div>
+      <div class="quick-chip" onclick="qc('help')">help</div>
+    </div>
+    <div id="chat-history">
+      <div class="msg ai"><div class="msg-avatar">P</div><div class="msg-bubble">Hi Akib — I'm Piko. No API key, no internet AI, no cost — I run right here on your laptop.
+
+I can: track your exams &amp; deadlines, manage projects, draft email templates, build study plans, create your assignment cover page, and answer common CSE/study questions.
+
+Try: "add exam", "study plan for data structures", "what is due soon", or just type "help" anytime.</div></div>
+    </div>
+    <div class="chat-input-row">
+      <textarea id="chat-input" placeholder="Type a command or question... (Enter to send)" onkeydown="handleKey(event)"></textarea>
+      <button class="btn btn-primary" onclick="sendChat()" style="height:46px;padding:0 16px;">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="page" id="page-projects">
+  <div class="page-header">
+    <div><div class="eyebrow">Coursework</div><h2>Projects &amp; Assignments</h2><p>Track your coursework</p></div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-project')">+ New Project</button>
+  </div>
+  <div id="projects-list"><p style="color:var(--ink-faint);font-size:13px;">No projects yet.</p></div>
+</div>
+
+<!-- NOTES -->
+<div class="page" id="page-notes">
+  <div class="page-header">
+    <div><div class="eyebrow">Journal</div><h2>Daily Notes</h2><p>Personal notes and journal</p></div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-note')">+ New Note</button>
+  </div>
+  <div id="notes-grid" class="grid-3"></div>
+</div>
+
+<!-- EXAMS -->
+<div class="page" id="page-exams">
+  <div class="page-header">
+    <div><div class="eyebrow">Schedule</div><h2>Exam Dates</h2><p>Never miss an exam — Summer 2026</p></div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-exam')">+ Add Exam</button>
+  </div>
+  <div id="exams-list"><p style="color:var(--ink-faint);font-size:13px;">No exams added yet.</p></div>
+</div>
+
+<!-- MAIL -->
+<div class="page" id="page-mail">
+  <div class="page-header"><div><div class="eyebrow">Inbox</div><h2>University Mail</h2><p>2024-3-50-024@std.ewubd.edu</p></div></div>
+  <div class="grid-2">
+    <div class="card" style="cursor:pointer;text-align:center;" onclick="window.open('https://mail.google.com','_blank')">
+      <div style="font-family:var(--font-display);font-size:28px;color:var(--copper);margin-bottom:10px;">@</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:4px;">Gmail</div>
+      <div style="font-size:12px;color:var(--ink-faint);margin-bottom:14px;">2024-3-50-024@std.ewubd.edu</div>
+      <button class="btn btn-primary" style="width:100%;">Open Gmail</button>
+    </div>
+    <div class="card" style="cursor:pointer;text-align:center;" onclick="window.open('https://outlook.office.com','_blank')">
+      <div style="font-family:var(--font-display);font-size:28px;color:var(--mint);margin-bottom:10px;">@</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:4px;">Outlook</div>
+      <div style="font-size:12px;color:var(--ink-faint);margin-bottom:14px;">EWU Outlook Portal</div>
+      <button class="btn btn-primary" style="width:100%;">Open Outlook</button>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Quick Email Templates</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+      <button class="btn btn-secondary btn-sm" onclick="goChat('Draft a polite email to my EWU professor requesting a deadline extension for my assignment')">Request Extension</button>
+      <button class="btn btn-secondary btn-sm" onclick="goChat('Write a professional email to my EWU ICE department professor asking about exam syllabus')">Exam Query</button>
+      <button class="btn btn-secondary btn-sm" onclick="goChat('Write an email to my supervisor about my project progress this week at EWU')">Project Update</button>
+      <button class="btn btn-secondary btn-sm" onclick="goChat('Draft a respectful email to my EWU professor apologizing for missing class')">Missed Class</button>
+    </div>
+  </div>
+</div>
+
+<!-- COVER PAGE -->
+<div class="page" id="page-coverpage">
+  <div class="page-header"><div><div class="eyebrow">Generator</div><h2>Assignment Cover Page</h2><p>Professional cover pages for EWU ICE submissions</p></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Assignment Details</h3>
+      <div class="form-group"><label>Assignment / Report Title *</label><input id="cp-title" placeholder="e.g. Implementation of Linked List in C++"></div>
+      <div class="form-group"><label>Course Name *</label><input id="cp-course" placeholder="e.g. Data Structures and Algorithms"></div>
+      <div class="form-group"><label>Course Code</label><input id="cp-code" placeholder="e.g. CSE-220"></div>
+      <div class="form-group"><label>Assignment Number</label><input id="cp-anum" placeholder="e.g. Assignment #2"></div>
+      <div class="form-group"><label>Submitted To (Teacher)</label><input id="cp-teacher" placeholder="e.g. Md. Shibli Noman, Lecturer, CSE Dept."></div>
+      <div class="form-group"><label>Submission Date</label><input id="cp-date" type="date"></div>
+      <div class="form-group"><label>Group Members (one per line, leave empty if solo)</label><textarea id="cp-members" placeholder="Ahmed Al Akib - 2024-3-50-024&#10;Another Name - ID"></textarea></div>
+      <button class="btn btn-primary" onclick="generateCover()" style="width:100%;margin-top:6px;">Generate Cover Page</button>
+      <button class="btn btn-secondary" onclick="printCover()" style="width:100%;margin-top:8px;">Print / Save as PDF</button>
+    </div>
+    <div>
+      <div id="cover-preview">
+        <div class="cover-logo-box">EWU</div>
+        <div class="cover-uni">East West University</div>
+        <div class="cover-dept">Department of Computer Science and Engineering<br><span style="font-size:11px;">ICE Program</span></div>
+        <div class="cover-title">Assignment Title Will Appear Here</div>
+        <div class="cover-course">Course Name (Course Code)</div>
+        <table class="cover-table" id="cp-table">
+          <tr><td>Submitted To</td><td>Professor Name</td></tr>
+          <tr><td>Submitted By</td><td>Ahmed Al Akib</td></tr>
+          <tr><td>Student ID</td><td>2024-3-50-024</td></tr>
+          <tr><td>Program</td><td>ICE, CSE Dept.</td></tr>
+          <tr><td>Semester</td><td>Summer 2026</td></tr>
+          <tr><td>Date</td><td>—</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDES -->
+<div class="page" id="page-slides">
+  <div class="page-header"><div><div class="eyebrow">Generator</div><h2>Slides Generator</h2><p>Structured presentation outlines</p></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Generate Presentation</h3>
+      <div class="form-group"><label>Topic *</label><input id="slide-topic" placeholder="e.g. Binary Search Trees in Data Structures"></div>
+      <div class="form-group"><label>Number of Slides</label>
+        <select id="slide-count"><option value="5">5 slides</option><option value="8" selected>8 slides</option><option value="10">10 slides</option><option value="12">12 slides</option></select>
+      </div>
+      <div class="form-group"><label>For which course / audience?</label><input id="slide-audience" placeholder="e.g. CSE-220 Data Structures, EWU ICE students"></div>
+      <div class="form-group"><label>Tone</label>
+        <select id="slide-tone"><option value="academic">Academic / Formal</option><option value="simple" selected>Simple &amp; Clear</option><option value="technical">Technical</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="generateSlides()" style="width:100%;">Generate Slide Outline</button>
+      <div id="slides-loading" style="display:none;text-align:center;margin-top:12px;color:var(--ink-faint);font-size:13px;">
+        <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span> Building slides...
+      </div>
+    </div>
+    <div id="slides-preview-area" style="overflow-y:auto;max-height:580px;padding-right:4px;">
+      <div style="color:var(--ink-faint);font-size:13px;padding:20px;text-align:center;">Slides will appear here</div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="page-header">
+    <div><div class="eyebrow">Configuration</div><h2>Settings</h2><p>Piko runs 100% offline — nothing to configure</p></div>
+    <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+  </div>
+
+  <div class="info-box">
+    <strong>Ahmed Al Akib</strong> · ID: 2024-3-50-024 · East West University · CSE Dept. ICE Program · Summer 2026<br>
+    2024-3-50-024@std.ewubd.edu
+  </div>
+
+  <div class="info-box mint">
+    Piko's assistant runs entirely in your browser using built-in logic — no signups, no internet AI service, no cost, ever. It handles exams, projects, notes, cover pages, study plans, and email templates without sending your data anywhere.
+  </div>
+
+  <div class="settings-section">
+    <h3>Your Info</h3>
+    <div class="grid-2">
+      <div class="form-group"><label>Full Name</label><input id="set-name" value="Ahmed Al Akib"></div>
+      <div class="form-group"><label>Student ID</label><input id="set-studentid" value="2024-3-50-024"></div>
+      <div class="form-group"><label>University</label><input id="set-uni" value="East West University"></div>
+      <div class="form-group"><label>Department</label><input id="set-dept" value="Department of Computer Science and Engineering"></div>
+      <div class="form-group"><label>Program</label><input id="set-program" value="ICE Program"></div>
+      <div class="form-group"><label>Semester</label><input id="set-semester" value="Summer 2026"></div>
+      <div class="form-group"><label>Email</label><input id="set-email" value="2024-3-50-024@std.ewubd.edu"></div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:8px;">
+    <strong>"Hello Piko" voice setup:</strong> Download <code style="background:var(--bg-inset);padding:1px 5px;border-radius:3px;font-family:var(--font-display);">jarvis_voice.py</code> → install Python → run it in background → say "Hello Piko" → it opens! See README.md for full steps.
+  </div>
+</div>
+
+</main>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-project">
+  <div class="modal">
+    <h3>New Project / Assignment</h3>
+    <div class="form-group"><label>Title *</label><input id="proj-name" placeholder="e.g. Database Lab Report #3"></div>
+    <div class="form-group"><label>Course</label><input id="proj-course" placeholder="e.g. CSE-311 Database Systems"></div>
+    <div class="form-group"><label>Deadline</label><input id="proj-deadline" type="date"></div>
+    <div class="form-group"><label>Tasks (one per line)</label><textarea id="proj-tasks" placeholder="Research the topic&#10;Write introduction&#10;Create ER diagram&#10;Final review and submit"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-project')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProject()">Create</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-note">
+  <div class="modal">
+    <h3>New Note</h3>
+    <div class="form-group"><label>Title</label><input id="note-title" placeholder="Note title..."></div>
+    <div class="form-group"><label>Content</label><textarea id="note-content" style="min-height:140px;" placeholder="Write your note..."></textarea></div>
+    <div class="form-group"><label>Tag</label>
+      <select id="note-tag"><option value="general">General</option><option value="class">Class Notes</option><option value="idea">Idea</option><option value="reminder">Reminder</option><option value="todo">To-Do</option></select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-note')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNote()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-exam">
+  <div class="modal">
+    <h3>Add Exam</h3>
+    <div class="form-group"><label>Subject / Course *</label><input id="exam-subject" placeholder="e.g. Data Structures (CSE-220)"></div>
+    <div class="form-group"><label>Exam Date *</label><input id="exam-date" type="date"></div>
+    <div class="form-group"><label>Exam Time</label><input id="exam-time" type="time"></div>
+    <div class="form-group"><label>Room / Building</label><input id="exam-room" placeholder="e.g. Room 401, Building B, EWU"></div>
+    <div class="form-group"><label>Syllabus / Notes</label><input id="exam-notes" placeholder="e.g. Chapters 1–6, no calculator"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-exam')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveExam()">Add Exam</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-note-view">
+  <div class="modal" style="max-width:580px;">
+    <h3 id="nv-title"></h3>
+    <p id="nv-date" style="font-family:var(--font-display);font-size:10.5px;color:var(--ink-faint);margin-bottom:12px;"></p>
+    <div id="nv-content" style="font-size:14px;line-height:1.7;white-space:pre-wrap;color:var(--ink);"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="nv-delete">Delete</button>
+      <button class="btn btn-secondary" onclick="closeModal('modal-note-view')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════ STATE ══════════
+const DEF = {
+  name:'Ahmed Al Akib', studentId:'2024-3-50-024',
+  uni:'East West University', dept:'Department of Computer Science and Engineering',
+  program:'ICE Program', semester:'Summer 2026',
+  email:'2024-3-50-024@std.ewubd.edu',
+  projects:[], notes:[], exams:[], chatHistory:[]
+};
+let S = {...DEF};
+function load(){try{const s=localStorage.getItem('jarvis_ewu');if(s)S={...DEF,...JSON.parse(s)};}catch(e){}applySettings();}
+function save(){localStorage.setItem('jarvis_ewu',JSON.stringify(S));}
+
+// ══════════ NAV ══════════
+document.querySelectorAll('.nav-item').forEach(el=>{
+  el.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('page-'+el.dataset.page).classList.add('active');
+    if(el.dataset.page==='dashboard') updateDash();
+  });
+});
+
+// ══════════ CLOCK ══════════
+function getGreet(){const h=new Date().getHours();return h<12?'Good morning, Akib':h<17?'Good afternoon, Akib':'Good evening, Akib';}
+function tick2(){
+  const n=new Date();
+  const hh=String(n.getHours()).padStart(2,'0'),mm=String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('clock-big').textContent=hh+':'+mm;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('date-big').textContent=`${days[n.getDay()]}, ${n.getDate()} ${months[n.getMonth()]} ${n.getFullYear()}`;
+  document.getElementById('greeting-text').textContent=getGreet();
+}
+setInterval(tick2,1000);tick2();
+
+// ══════════ DASHBOARD ══════════
+function updateDash(){
+  const pen=S.projects.reduce((a,p)=>a+p.tasks.filter(t=>!t.done).length,0);
+  document.getElementById('stat-projects').textContent=S.projects.filter(p=>!p.done).length;
+  document.getElementById('stat-tasks').textContent=pen;
+  const tod=new Date().toDateString();
+  document.getElementById('stat-notes').textContent=S.notes.filter(n=>new Date(n.date).toDateString()===tod).length;
+  document.getElementById('stat-exams').textContent=S.exams.filter(e=>new Date(e.date)>=new Date()).length;
+  const ex=S.exams.filter(e=>new Date(e.date)>=new Date()).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,4);
+  document.getElementById('dash-exams').innerHTML=ex.length?ex.map(e=>{const d=daysLeft(e.date);const c=d<=3?'var(--rose)':d<=7?'var(--gold)':'var(--mint)';return`<div class="upcoming-item"><div class="upcoming-dot" style="background:${c}"></div><div><div style="font-size:13px;font-weight:600;">${esc(e.subject)}</div><div style="font-family:var(--font-display);font-size:10.5px;color:var(--ink-faint);">${fmtD(e.date)} · ${d}D LEFT</div></div></div>`}).join(''):'<p style="color:var(--ink-faint);font-size:13px;">No upcoming exams</p>';
+  const pr=S.projects.filter(p=>!p.done).slice(0,4);
+  document.getElementById('dash-projects').innerHTML=pr.length?pr.map(p=>{const dn=p.tasks.filter(t=>t.done).length,tt=p.tasks.length,pct=tt?Math.round(dn/tt*100):0;return`<div class="upcoming-item"><div class="upcoming-dot" style="background:var(--copper)"></div><div style="flex:1"><div style="font-size:13px;font-weight:600;">${esc(p.name)}</div><div class="progress-bar" style="margin:5px 0 0"><div class="progress-fill" style="width:${pct}%"></div></div></div><span style="font-family:var(--font-display);font-size:11px;color:var(--ink-faint);">${pct}%</span></div>`}).join(''):'<p style="color:var(--ink-faint);font-size:13px;">No active projects</p>';
+}
+function saveQuickNote(){
+  const t=document.getElementById('quick-note').value.trim();if(!t)return;
+  S.notes.unshift({id:Date.now(),title:'Quick Note — '+new Date().toLocaleDateString('en-GB'),content:t,tag:'general',date:new Date().toISOString()});
+  save();renderNotes();toast('Note saved');document.getElementById('quick-note').value='';updateDash();
+}
+
+// ══════════ PIKO LOCAL BRAIN (100% offline, no API) ══════════
+function getOpenProjects(){return S.projects.filter(p=>p.tasks.length&&!p.tasks.every(t=>t.done));}
+function getUpcomingExams(){return S.exams.filter(e=>new Date(e.date)>=new Date()).sort((a,b)=>new Date(a.date)-new Date(b.date));}
+
+function jarvisReply(raw){
+  const msg=raw.trim();
+  const low=msg.toLowerCase();
+
+  if(/^(hi|hello|hey|salam|assalamualaikum)\b/.test(low)){
+    return `Hey Akib! ${getGreet().split(',')[0]}. What do you need — exams, projects, notes, a cover page, or study help?`;
+  }
+
+  if(low.includes('help')||low==='?'||low.includes('what can you do')){
+    return `Here's what I can do, all offline:
+
+EXAMS — say "add exam" or check the Exam Dates tab for countdowns
+PROJECTS — say "new project [name]" or use the Projects tab
+NOTES — say "note: [your text]" to save instantly
+EMAILS — say "email professor about [topic]" for a ready-to-send draft
+STUDY PLAN — say "study plan for [subject]"
+COVER PAGE — say "cover page" to jump to the generator
+DEADLINES — say "what is due soon" or "what is due"
+QUICK HELP — ask me basic CSE concepts (arrays, OOP, DBMS, networking, etc.)
+
+Try one now!`;
+  }
+
+  if(low.includes('due soon')||low.includes('what is due')||low.includes("what's due")||low.includes('deadline')||low.includes('upcoming')){
+    const exams=getUpcomingExams().slice(0,3);
+    const projects=getOpenProjects().slice(0,3);
+    let out='';
+    if(exams.length){out+='Upcoming exams:\n'+exams.map(e=>`• ${e.subject} — ${fmtD(e.date)} (${daysLeft(e.date)} days)`).join('\n')+'\n\n';}
+    if(projects.length){out+='Open projects:\n'+projects.map(p=>{const dn=p.tasks.filter(t=>t.done).length,tt=p.tasks.length;return `• ${p.name} — ${dn}/${tt} tasks done${p.deadline?', due '+fmtD(p.deadline):''}`;}).join('\n');}
+    if(!out)out="You're all clear! No exams or open project tasks tracked right now. Add some in the Exams or Projects tab.";
+    return out;
+  }
+
+  if(/\b(add|set|create|schedule)\b.*\bexam\b/.test(low) || /\bexam\b.*\b(tomorrow|next week|on|coming|soon)\b/.test(low) || low.startsWith('add exam') || (low.includes('exam')&&!low.includes('what')&&!low.includes('due')&&!low.includes('upcoming'))){
+    navTo('exams');
+    return `Got it — taking you to the Exam Dates tab. Click "+ Add Exam" and fill in the subject, date, time, and room. I'll show you the countdown automatically.`;
+  }
+
+  if(/\b(new|add|create|start)\b.*\b(project|assignment)\b/.test(low) || low.startsWith('new project')||low.startsWith('add project')||low.startsWith('create project')){
+    const name=msg.replace(/.*\b(new|add|create|start)\b\s*(a\s+)?(project|assignment)\s*(for|on|called)?\s*/i,'').trim();
+    navTo('projects');
+    if(name && name.length<60)return `Opening Projects — click "+ New Project" and use "${name}" as the title. Add your task list and deadline there.`;
+    return `Taking you to Projects — click "+ New Project" to set it up with tasks and a deadline.`;
+  }
+
+  if(/\b(make|write|create|jot|note)\b.*\b(note|list|down)\b/.test(low) || low.startsWith('note:')||low.startsWith('note ')){
+    let content=msg.replace(/^note:?\s*/i,'').replace(/.*\b(make|write|create|jot)\b\s*(a|me)?\s*(note|list)\s*(of|about|that|saying)?\s*/i,'').trim();
+    if(content && content.length>2 && !/^(a note|a list)?$/i.test(content)){
+      S.notes.unshift({id:Date.now(),title:'Note — '+new Date().toLocaleDateString('en-GB'),content,tag:'general',date:new Date().toISOString()});
+      save();renderNotes();updateDash();
+      return `Saved to your Notes: "${content}"`;
+    }
+    navTo('notes');
+    return `Opening Notes — click "+ New Note" to write one, or just tell me what to write, like "make a note: buy a notebook".`;
+  }
+
+  if(/\b(make|set|create)\b.*\breminder\b/.test(low) || low.startsWith('remind me') || low.includes("don't let me forget") || low.includes('dont let me forget')){
+    let content=msg.replace(/^remind me( to)?\s*/i,'').replace(/.*\b(make|set|create)\b\s*(a|me)?\s*reminder\s*(to|that|about|for)?\s*/i,'').replace(/.*don'?t let me forget( to)?\s*/i,'').trim();
+    if(content && content.length>2){
+      S.notes.unshift({id:Date.now(),title:'Reminder',content,tag:'reminder',date:new Date().toISOString()});
+      save();renderNotes();updateDash();
+      return `Reminder saved: "${content}" — you'll find it in your Daily Notes tab tagged as a reminder.`;
+    }
+    navTo('notes');
+    return `What should I remind you about? Try: "remind me to submit the lab report" or "make a reminder to call mom".`;
+  }
+
+  if(low.includes('cover page')||low.includes('coverpage')){
+    navTo('coverpage');
+    return `Opening the Cover Page Generator — your name, ID, and university are pre-filled. Just add the assignment title, course, and teacher's name, then click Generate.`;
+  }
+
+  if(low.includes('slide')||low.includes('presentation')||low.includes('ppt')){
+    navTo('slides');
+    return `Opening the Slides Generator — type your topic and I'll build a structured outline you can paste into PowerPoint or Google Slides.`;
+  }
+
+  if(low.includes('email')||low.includes('mail')){
+    return draftEmail(msg);
+  }
+
+  if(low.includes('study plan')||low.startsWith('study')){
+    const topic=msg.replace(/.*(study plan for|study plan|study)\s*/i,'').trim()||'your subject';
+    return buildStudyPlan(topic);
+  }
+
+  const concept=lookupConcept(low);
+  if(concept)return concept;
+
+  return `I'm a simple offline assistant, so I work best with specific commands rather than open questions. Try:
+
+• "add exam" — track an exam date
+• "new project [name]" — start tracking an assignment
+• "study plan for [subject]" — get a study schedule
+• "email professor about [topic]" — draft an email
+• "cover page" — generate your assignment cover page
+• "what is due soon" — see your deadlines
+
+Or type "help" anytime to see this list again.`;
+}
+
+function draftEmail(msg){
+  const topic=msg.replace(/.*email\s*(professor|teacher|to)?\s*(about)?\s*/i,'').trim()||'your topic';
+  const subjectLine=topic.charAt(0).toUpperCase()+topic.slice(1);
+  return `Here's an email draft you can copy and send from ${S.email}:
+
+────────────────────
+To: [professor's email]
+Subject: ${subjectLine} — ${S.studentId}, ${S.program}
+
+Dear Sir/Madam,
+
+I hope you are doing well. I am writing regarding ${topic}. 
+
+[Add your specific details here — what you need, by when, and why.]
+
+I would really appreciate your guidance on this matter. Please let me know if you need any further information from my end.
+
+Thank you for your time and consideration.
+
+Best regards,
+${S.name}
+ID: ${S.studentId}
+${S.program}, ${S.dept}
+${S.uni}
+────────────────────
+
+You can open Gmail/Outlook directly from the University Mail tab.`;
+}
+
+function buildStudyPlan(topic){
+  return `7-Day Study Plan: ${topic}
+
+Day 1 — Foundations
+Read the core chapter/lecture slides on ${topic}. Write a one-page summary in your own words.
+
+Day 2 — Key Concepts
+List all important terms, formulas, or definitions related to ${topic}. Make flashcards if helpful.
+
+Day 3 — Practice
+Solve 5–10 practice problems or past questions related to ${topic}.
+
+Day 4 — Deep Dive
+Focus on the parts you struggled with on Day 3. Watch a video or re-read that section.
+
+Day 5 — Apply
+If it's a programming/technical topic, code a small example. If theory-based, write short explanations from memory.
+
+Day 6 — Mock Test
+Do a timed practice test or past paper question set on ${topic}, no notes allowed.
+
+Day 7 — Review & Rest
+Review mistakes from Day 6, revise your summary sheet, then rest before the exam.
+
+Tip: Add this as a Project in the Projects tab with each day as a task, so you can check them off!`;
+}
+
+function lookupConcept(low){
+  const kb={
+    'array':'An array is a fixed-size collection of elements of the same type stored in contiguous memory. Access is O(1) by index, but insertion/deletion in the middle is O(n) since elements must shift.',
+    'linked list':'A linked list is a linear data structure where each node holds data and a pointer to the next node. Insertion/deletion is O(1) if you have the position, but access is O(n) since you must traverse from the head.',
+    'stack':'A stack follows LIFO (Last In, First Out). Core operations: push (add to top), pop (remove from top), peek (view top). Used in function calls, undo features, and expression evaluation.',
+    'queue':'A queue follows FIFO (First In, First Out). Core operations: enqueue (add to back), dequeue (remove from front). Used in scheduling, buffering, and BFS traversal.',
+    'oop':'OOP (Object-Oriented Programming) is built on 4 pillars: Encapsulation (bundling data+methods), Abstraction (hiding complexity), Inheritance (reusing code via parent-child classes), and Polymorphism (same interface, different behavior).',
+    'normalization':'Database normalization organizes tables to reduce redundancy. 1NF removes repeating groups, 2NF removes partial dependency on composite keys, 3NF removes transitive dependency — each non-key column should depend only on the primary key.',
+    'tcp':'TCP (Transmission Control Protocol) is connection-oriented, reliable, and ensures ordered delivery via acknowledgments — used for web browsing, email, file transfer. UDP is connectionless and faster but unreliable — used for streaming and gaming.',
+    'binary search':'Binary search finds an element in a sorted array in O(log n) by repeatedly halving the search range: compare the middle element, then search left or right half depending on the comparison.',
+    'recursion':'Recursion is when a function calls itself to solve smaller instances of a problem. It needs a base case (stopping condition) and a recursive case. Uses the call stack, so deep recursion can cause stack overflow.',
+    'big o':'Big O notation describes algorithm efficiency as input grows. Common orders (fastest to slowest): O(1) constant, O(log n) logarithmic, O(n) linear, O(n log n), O(n²) quadratic, O(2ⁿ) exponential.',
+    'pointer':'A pointer is a variable that stores the memory address of another variable. In C/C++, declared with *, and & gets the address of a variable. Used for dynamic memory, arrays, and passing by reference.',
+  };
+  for(const key in kb){if(low.includes(key))return `${key.charAt(0).toUpperCase()+key.slice(1)}:\n\n${kb[key]}`;}
+  return null;
+}
+
+function sendChat(){
+  const inp=document.getElementById('chat-input');
+  const txt=inp.value.trim();if(!txt)return;
+  inp.value='';
+  addMsg('user',txt);
+  S.chatHistory.push({role:'user',content:txt});
+  const ty=addTyping();
+  setTimeout(()=>{
+    ty.remove();
+    const reply=jarvisReply(txt);
+    S.chatHistory.push({role:'assistant',content:reply});
+    addMsg('ai',reply);
+    if(S.chatHistory.length>60)S.chatHistory=S.chatHistory.slice(-60);
+    save();
+  },350+Math.random()*350);
+}
+
+function addMsg(role,text){
+  const d=document.createElement('div');d.className='msg '+role;
+  d.innerHTML=`<div class="msg-avatar">${role==='user'?'A':'P'}</div><div class="msg-bubble">${esc(text)}</div>`;
+  const h=document.getElementById('chat-history');h.appendChild(d);h.scrollTop=h.scrollHeight;return d;
+}
+function addTyping(){
+  const d=document.createElement('div');d.className='msg ai';
+  d.innerHTML=`<div class="msg-avatar">P</div><div class="msg-bubble"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+  const h=document.getElementById('chat-history');h.appendChild(d);h.scrollTop=h.scrollHeight;return d;
+}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+function clearChat(){S.chatHistory=[];document.getElementById('chat-history').innerHTML=`<div class="msg ai"><div class="msg-avatar">P</div><div class="msg-bubble">Chat cleared. How can I help you, Akib?</div></div>`;}
+function qc(p){document.getElementById('chat-input').value=p;document.getElementById('chat-input').focus();navTo('chat');}
+function goChat(m){document.getElementById('chat-input').value=m;navTo('chat');}
+function navTo(page){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelector(`[data-page="${page}"]`).classList.add('active');document.getElementById('page-'+page).classList.add('active');}
+
+// ══════════ PROJECTS ══════════
+function saveProject(){
+  const name=document.getElementById('proj-name').value.trim();if(!name)return;
+  const tasks=document.getElementById('proj-tasks').value.split('\n').filter(t=>t.trim()).map(t=>({text:t.trim(),done:false}));
+  S.projects.unshift({id:Date.now(),name,course:document.getElementById('proj-course').value.trim(),deadline:document.getElementById('proj-deadline').value,tasks,done:false,created:new Date().toISOString()});
+  save();renderProjects();closeModal('modal-project');
+  ['proj-name','proj-course','proj-deadline','proj-tasks'].forEach(id=>document.getElementById(id).value='');
+  toast('Project created');updateDash();
+}
+function renderProjects(){
+  const el=document.getElementById('projects-list');
+  if(!S.projects.length){el.innerHTML='<p style="color:var(--ink-faint);font-size:13px;">No projects yet. Click "+ New Project" to start.</p>';return;}
+  el.innerHTML=S.projects.map((p,pi)=>{
+    const dn=p.tasks.filter(t=>t.done).length,tt=p.tasks.length,pct=tt?Math.round(dn/tt*100):0;
+    const bc=pct===100?'badge-mint':p.deadline&&daysLeft(p.deadline)<=3?'badge-rose':'badge-copper';
+    const st=pct===100?'DONE':p.deadline?daysLeft(p.deadline)+'D LEFT':'IN PROGRESS';
+    return`<div class="project-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+        <div><div style="font-size:15px;font-weight:600;">${esc(p.name)}</div>${p.course?`<div style="font-size:12px;color:var(--ink-faint);margin-top:2px;">${esc(p.course)}</div>`:''}</div>
+        <div style="display:flex;gap:8px;align-items:center;"><span class="badge ${bc}">${st}</span><button class="btn btn-danger btn-sm" onclick="delProject(${pi})">✕</button></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div style="font-family:var(--font-display);font-size:10.5px;color:var(--ink-faint);margin-bottom:8px;">${dn}/${tt} TASKS · ${pct}%${p.deadline?' · DUE '+fmtD(p.deadline).toUpperCase():''}</div>
+      ${p.tasks.map((t,ti)=>`<div class="task-item ${t.done?'done':''}"><input type="checkbox" class="task-cb" ${t.done?'checked':''} onchange="toggleTask(${pi},${ti},this.checked)"><span>${esc(t.text)}</span></div>`).join('')}
+    </div>`;
+  }).join('');
+}
+function toggleTask(pi,ti,done){S.projects[pi].tasks[ti].done=done;save();renderProjects();updateDash();}
+function delProject(pi){if(!confirm('Delete project?'))return;S.projects.splice(pi,1);save();renderProjects();updateDash();toast('Deleted');}
+
+// ══════════ NOTES ══════════
+function saveNote(){
+  const c=document.getElementById('note-content').value.trim();if(!c)return;
+  S.notes.unshift({id:Date.now(),title:document.getElementById('note-title').value.trim()||'Note — '+new Date().toLocaleDateString('en-GB'),content:c,tag:document.getElementById('note-tag').value,date:new Date().toISOString()});
+  save();renderNotes();closeModal('modal-note');
+  ['note-title','note-content'].forEach(id=>document.getElementById(id).value='');
+  toast('Note saved');updateDash();
+}
+function renderNotes(){
+  const el=document.getElementById('notes-grid');
+  if(!S.notes.length){el.innerHTML='<p style="color:var(--ink-faint);font-size:13px;">No notes yet.</p>';return;}
+  const tc={general:'badge-copper',class:'badge-mint',idea:'badge-gold',reminder:'badge-rose',todo:'badge-mint'};
+  el.innerHTML=S.notes.map((n,i)=>`<div class="note-card" onclick="viewNote(${i})">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+      <h4>${esc(n.title)}</h4><span class="badge ${tc[n.tag]||'badge-copper'}" style="flex-shrink:0;margin-left:6px;">${n.tag.toUpperCase()}</span>
+    </div>
+    <p>${esc(n.content)}</p><div class="note-date">${fmtD(n.date).toUpperCase()}</div>
+  </div>`).join('');
+}
+function viewNote(i){
+  const n=S.notes[i];
+  document.getElementById('nv-title').textContent=n.title;
+  document.getElementById('nv-date').textContent=fmtD(n.date).toUpperCase()+' · '+n.tag.toUpperCase();
+  document.getElementById('nv-content').textContent=n.content;
+  document.getElementById('nv-delete').onclick=()=>{S.notes.splice(i,1);save();renderNotes();closeModal('modal-note-view');updateDash();toast('Note deleted');};
+  openModal('modal-note-view');
+}
+
+// ══════════ EXAMS ══════════
+function saveExam(){
+  const sub=document.getElementById('exam-subject').value.trim(),dt=document.getElementById('exam-date').value;
+  if(!sub||!dt)return;
+  S.exams.push({id:Date.now(),subject:sub,date:dt,time:document.getElementById('exam-time').value,room:document.getElementById('exam-room').value.trim(),notes:document.getElementById('exam-notes').value.trim()});
+  S.exams.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  save();renderExams();closeModal('modal-exam');
+  ['exam-subject','exam-date','exam-time','exam-room','exam-notes'].forEach(id=>document.getElementById(id).value='');
+  toast('Exam added');updateDash();
+}
+function renderExams(){
+  const el=document.getElementById('exams-list');
+  if(!S.exams.length){el.innerHTML='<p style="color:var(--ink-faint);font-size:13px;">No exams yet. Click "+ Add Exam" to start.</p>';return;}
+  const now=new Date();
+  const up=S.exams.filter(e=>new Date(e.date)>=now),past=S.exams.filter(e=>new Date(e.date)<now);
+  let h='';
+  if(up.length){
+    h+='<h3 style="font-family:var(--font-display);font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:11px;">Upcoming</h3>';
+    h+=up.map(e=>{
+      const d=daysLeft(e.date),idx=S.exams.indexOf(e);
+      const col=d===0?'var(--rose)':d<=3?'var(--gold)':d<=7?'var(--mint)':'var(--copper)';
+      return`<div class="exam-card">
+        <div class="countdown-box"><div class="countdown-num" style="color:${col}">${d}</div><div class="countdown-label">DAYS</div></div>
+        <div style="flex:1">
+          <div style="font-size:15px;font-weight:600;">${esc(e.subject)}</div>
+          <div style="font-size:12px;color:var(--ink-dim);margin-top:3px;">${fmtD(e.date)}${e.time?' at '+e.time:''}${e.room?' · '+e.room:''}</div>
+          ${e.notes?`<div style="font-size:12px;color:var(--mint);margin-top:3px;">${esc(e.notes)}</div>`:''}
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="delExam(${idx})">Remove</button>
+      </div>`;
+    }).join('');
+  }
+  if(past.length){
+    h+=`<h3 style="font-family:var(--font-display);font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:1.2px;margin:19px 0 11px;">Past Exams</h3>`;
+    h+=past.map(e=>{const idx=S.exams.indexOf(e);return`<div class="exam-card" style="opacity:.4"><div class="countdown-box"><div class="countdown-num" style="color:var(--ink-faint)">✓</div><div class="countdown-label">DONE</div></div><div style="flex:1"><div style="font-size:14px;font-weight:600;">${esc(e.subject)}</div><div style="font-size:11px;color:var(--ink-faint);">${fmtD(e.date)}</div></div><button class="btn btn-secondary btn-sm" onclick="delExam(${idx})">✕</button></div>`;}).join('');
+  }
+  el.innerHTML=h;
+}
+function delExam(i){S.exams.splice(i,1);save();renderExams();updateDash();toast('Removed');}
+
+// ══════════ COVER PAGE ══════════
+function generateCover(){
+  const title=document.getElementById('cp-title').value||'Assignment Title';
+  const course=document.getElementById('cp-course').value||'Course Name';
+  const code=document.getElementById('cp-code').value;
+  const anum=document.getElementById('cp-anum').value;
+  const teacher=document.getElementById('cp-teacher').value||'Professor Name';
+  const date=document.getElementById('cp-date').value;
+  const members=document.getElementById('cp-members').value.split('\n').filter(m=>m.trim());
+  document.querySelector('.cover-uni').textContent='East West University';
+  document.querySelector('.cover-dept').innerHTML='Department of Computer Science and Engineering<br><span style="font-size:11px;">ICE Program</span>';
+  document.querySelector('.cover-logo-box').textContent='EWU';
+  document.querySelector('.cover-title').textContent=(anum?anum+': ':'')+title;
+  document.querySelector('.cover-course').textContent=course+(code?' ('+code+')':'');
+  let rows=`<tr><td>Submitted To</td><td>${esc(teacher)}</td></tr>`;
+  if(members.length>1){rows+=members.map(m=>`<tr><td>Submitted By</td><td>${esc(m)}</td></tr>`).join('');}
+  else{rows+=`<tr><td>Submitted By</td><td>Ahmed Al Akib</td></tr><tr><td>Student ID</td><td>2024-3-50-024</td></tr><tr><td>Program</td><td>ICE, CSE Dept.</td></tr>`;}
+  rows+=`<tr><td>Semester</td><td>Summer 2026</td></tr>`;
+  if(date)rows+=`<tr><td>Submission Date</td><td>${new Date(date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</td></tr>`;
+  document.getElementById('cp-table').innerHTML=rows;
+  toast('Cover page ready');
+}
+function printCover(){
+  const c=document.getElementById('cover-preview').innerHTML;
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>EWU Cover Page</title><style>body{font-family:'Times New Roman',serif;margin:60px 70px;color:#1a1a1a;}.cover-logo-box{width:65px;height:65px;background:#b8835f;border-radius:8px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:bold;text-align:center;line-height:65px;}.cover-uni{font-size:15px;font-weight:bold;text-align:center;margin-bottom:4px;}.cover-dept{font-size:12px;text-align:center;color:#555;margin-bottom:34px;}.cover-title{font-size:20px;font-weight:bold;text-align:center;border-bottom:2px solid #1a1a1a;border-top:2px solid #1a1a1a;padding:14px 0;margin:0 30px 26px;}.cover-course{font-size:13px;text-align:center;color:#444;margin-bottom:34px;}.cover-table{width:100%;border-collapse:collapse;font-size:12px;max-width:300px;margin:0 auto;}.cover-table td{padding:6px 10px;border:1px solid #ddd;}.cover-table td:first-child{background:#f5f2ec;font-weight:bold;}</style></head><body>${c}</body></html>`);
+  w.document.close();setTimeout(()=>w.print(),400);
+}
+
+// ══════════ SLIDES (offline template-based) ══════════
+function generateSlides(){
+  const topic=document.getElementById('slide-topic').value.trim();if(!topic){toast('Enter a topic first');return;}
+  const count=parseInt(document.getElementById('slide-count').value);
+  const audience=document.getElementById('slide-audience').value.trim();
+  document.getElementById('slides-loading').style.display='block';
+  document.getElementById('slides-preview-area').innerHTML='';
+
+  setTimeout(()=>{
+    const slides=buildSlideOutline(topic,count,audience);
+    document.getElementById('slides-loading').style.display='none';
+    const colors=['#e8a87c','#7fd9c4','#e8c87c','#e8847c','#b8835f','#9fc9e8','#c4a8e8','#e8a8c4'];
+    document.getElementById('slides-preview-area').innerHTML=slides.map((s,i)=>`
+      <div class="slide-preview" style="border-color:${colors[i%colors.length]};">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${colors[i%colors.length]};"></div>
+        <div style="font-family:var(--font-display);font-size:10px;color:${colors[i%colors.length]};letter-spacing:1px;margin-bottom:8px;font-weight:600;">SLIDE ${i+1}</div>
+        <h2>${esc(s.title)}</h2>
+        <ul>${s.points.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>
+        <div class="slide-num">${i+1}/${slides.length}</div>
+      </div>`).join('');
+    toast(`${slides.length} slides generated`);
+  },500);
+}
+
+function buildSlideOutline(topic,count,audience){
+  const titleCase=topic.charAt(0).toUpperCase()+topic.slice(1);
+  const base=[
+    {title:titleCase,points:['Presented by '+S.name,S.studentId+' · '+S.program,audience||S.dept,S.semester]},
+    {title:'Introduction',points:[`What is ${titleCase}?`,'Why this topic matters','Brief background','Scope of this presentation']},
+    {title:'Key Concepts',points:[`Core definitions related to ${titleCase}`,'Important terminology','Underlying principles','How it fits the broader subject']},
+    {title:'How It Works',points:['Step-by-step breakdown','Key components or stages','Visual/diagram placeholder','Example walkthrough']},
+    {title:'Advantages',points:['Main benefit 1','Main benefit 2','Main benefit 3','Real-world relevance']},
+    {title:'Challenges / Limitations',points:['Common issue 1','Common issue 2','Trade-offs to consider','Open problems']},
+    {title:'Real-World Applications',points:['Industry use case 1','Industry use case 2','Academic relevance','Future potential']},
+    {title:'Comparison',points:[`${titleCase} vs alternative approach`,'Performance considerations','When to use which','Summary table placeholder']},
+    {title:'Case Study / Example',points:['Specific example or scenario','Implementation detail','Results or outcome','Lessons learned']},
+    {title:'Future Trends',points:['Where this is heading','Emerging research/technology','Predictions','Open questions']},
+    {title:'Conclusion',points:['Recap of key points','Why it matters','Final thoughts','Q&A invitation']},
+    {title:'References',points:['Textbook / course materials','Research papers','Online resources','Thank you!']}
+  ];
+  let slides;
+  if(count<=base.length){
+    slides=[base[0]];
+    const middle=base.slice(1,-1);
+    const step=(middle.length)/(count-2);
+    for(let i=0;i<count-2;i++){slides.push(middle[Math.min(Math.floor(i*step),middle.length-1)]);}
+    slides.push(base[base.length-1]);
+  }else{
+    slides=base;
+  }
+  return slides.slice(0,count);
+}
+
+// ══════════ SETTINGS ══════════
+function applySettings(){
+  const flds=['name','studentId','uni','dept','program','semester','email'];
+  flds.forEach(k=>{const el=document.getElementById('set-'+k.toLowerCase());if(el)el.value=S[k]||'';});
+}
+function saveSettings(){
+  S.name=document.getElementById('set-name').value.trim();
+  S.studentId=document.getElementById('set-studentid').value.trim();
+  S.uni=document.getElementById('set-uni').value.trim();
+  S.dept=document.getElementById('set-dept').value.trim();
+  S.program=document.getElementById('set-program').value.trim();
+  S.semester=document.getElementById('set-semester').value.trim();
+  S.email=document.getElementById('set-email').value.trim();
+  save();toast('Settings saved');updateDash();
+}
+
+// ══════════ UTILS ══════════
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtD(d){if(!d)return'';return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function daysLeft(ds){const n=new Date();n.setHours(0,0,0,0);const d=new Date(ds);d.setHours(0,0,0,0);return Math.ceil((d-n)/86400000);}
+
+// ══════════ INIT ══════════
+load();renderProjects();renderNotes();renderExams();updateDash();
+
+// Handle voice command passed via URL (?say=...) from jarvis_voice.py
+(function handleVoiceParam(){
+  const params = new URLSearchParams(window.location.search);
+  const said = params.get('say');
+  if(said && said.trim()){
+    navTo('chat');
+    setTimeout(()=>{
+      document.getElementById('chat-input').value = said.trim();
+      sendChat();
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }, 300);
+  }
+})();
+</script>
+</body>
+</html>
